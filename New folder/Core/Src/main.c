@@ -50,7 +50,7 @@ arm_pid_instance_f32 PID = {0};
 float position = 0;
 float setposition = 0;
 float Vfeedback = 0;
-uint32_t QEIReadRaw;
+float QEIReadRaw = 0;
 static uint32_t timestamp = 0;
 /* USER CODE END PV */
 
@@ -126,32 +126,40 @@ int main(void)
 	  if(HAL_GetTick()>timestamp)
 	  {
 		  timestamp = HAL_GetTick() + 20;
-		  QEIReadRaw = __HAL_TIM_GET_COUNTER(&htim5);
+		  QEIReadRaw = __HAL_TIM_GET_COUNTER(&htim5)*0.1171875;
 		  Vfeedback = arm_pid_f32(&PID,setposition - QEIReadRaw);
 		  if (setposition > 0 && setposition <= 36000)
 		  {
-			  if(fabs(setposition - QEIReadRaw) < 2)
+			  if(fabs(setposition - QEIReadRaw) < 0.8)
 			  {
 				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,0);
 				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,0);
+				  Vfeedback = 0;
 			  }
 			  else if(Vfeedback > 0)
 			  {
-				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,0);
-				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,Vfeedback);
 				  if(Vfeedback < 40)
 				  {
 					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,0);
-					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,60);
+					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,20);
+				  }
+				  else
+				  {
+					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,0);
+					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,Vfeedback);
 				  }
 			  }
 			  else if(Vfeedback < 0)
 			  {
-				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Vfeedback*(-1));
-				  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,0);
+
 				  if(Vfeedback > -40)
 				  {
-					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,60);
+					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,20);
+					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,0);
+				  }
+				  else
+				  {
+					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Vfeedback*(-1));
 					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,0);
 				  }
 			  }

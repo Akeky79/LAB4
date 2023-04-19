@@ -103,7 +103,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   PID.Kp = 25;
   PID.Ki = 0.00001;
-  PID.Kd = 5;
+  PID.Kd = 4;
   arm_pid_init_f32(&PID,0);
 
   HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_1|TIM_CHANNEL_2);

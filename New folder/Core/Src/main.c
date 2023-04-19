@@ -92,7 +92,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNAL_1|TIM_CHANNAL_2);
+  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_1|TIM_CHANNEL_2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,7 +103,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  static uint32_t timestamp = 0;
-	  if(HAL_GetTick()>timestap)
+	  if(HAL_GetTick()>timestamp)
 	  {
 		  timestamp = HAL_GetTick() + 500;
 		  QEIReadRaw = __HAL_TIM_GET_COUNTER(&htim3);

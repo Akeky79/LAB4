@@ -82,8 +82,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
-	HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -163,7 +162,10 @@ int main(void)
 					  __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,0);
 				  }
 			  }
-
+		  }
+		  else
+		  {
+			  Vfeedback = 0;
 		  }
 	  }
   }
@@ -316,7 +318,7 @@ static void MX_TIM5_Init(void)
   htim5.Instance = TIM5;
   htim5.Init.Prescaler = 0;
   htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim5.Init.Period = 307199;
+  htim5.Init.Period = 307210;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI12;

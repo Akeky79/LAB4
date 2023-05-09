@@ -127,7 +127,7 @@ int main(void)
 		  timestamp = HAL_GetTick() + 20;
 		  QEIReadRaw = __HAL_TIM_GET_COUNTER(&htim5)*0.1171875;
 		  Vfeedback = arm_pid_f32(&PID,setposition - QEIReadRaw);
-		  if (setposition > 0 && setposition <= 36000)
+		  if (setposition >= 0 && setposition <= 36000)
 		  {
 			  if(fabs(setposition - QEIReadRaw) < 0.8)
 			  {
